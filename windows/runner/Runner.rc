@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.0xezzdev" "\0"
+            VALUE "CompanyName", "com.ezzdev" "\0"
             VALUE "FileDescription", "qatrak" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "qatrak" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.0xezzdev. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.ezzdev. All rights reserved." "\0"
             VALUE "OriginalFilename", "qatrak.exe" "\0"
             VALUE "ProductName", "qatrak" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

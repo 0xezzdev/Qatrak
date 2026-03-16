@@ -1,4 +1,4 @@
-package com.0xezzdev.qatrak
+package com.ezzdev.qatrak
 
 import io.flutter.embedding.android.FlutterActivity
 
