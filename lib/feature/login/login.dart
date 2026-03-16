@@ -4,9 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/images/app_images.dart';
 import 'package:qatrak/core/widget/custom_button.dart';
+import 'package:qatrak/core/widget/custom_snackbar.dart';
 import 'package:qatrak/core/widget/custom_text_field.dart';
 import 'package:qatrak/core/widget/social_button.dart';
+import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/feature/signup/signup.dart';
+import 'package:qatrak/services/auth/auth_services.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -19,6 +22,37 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordHidden = true;
+  final AuthServices _authService = AuthServices();
+  bool isLoading = false;
+
+  Future<void> login() async {
+    setState(() => isLoading = true);
+    try {
+      await _authService.signInUser(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackBar(
+            title: 'Error',
+            message:
+                'Failed to sign in. Please check your credentials and try again.',
+            color: AppColors.error,
+            icon: Icons.error_outline,
+          ),
+        );
+      }
+    }
+    if (mounted) setState(() => isLoading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,12 +156,7 @@ class _LoginState extends State<Login> {
                         ],
                       ),
                       SizedBox(height: 20.h),
-                      CustomButton(
-                        text: 'Login',
-                        onPressed: () {
-                          print("Login pressed");
-                        },
-                      ),
+                      CustomButton(text: 'Login', onPressed: login),
                       SizedBox(height: 20.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
