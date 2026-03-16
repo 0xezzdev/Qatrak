@@ -9,6 +9,7 @@ import 'package:qatrak/core/widget/custom_text_field.dart';
 import 'package:qatrak/core/widget/social_button.dart';
 import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/services/auth/auth_services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -18,7 +19,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -57,6 +58,19 @@ class _SignupState extends State<Signup> {
       }
     }
     if (mounted) setState(() => isLoading = false);
+  }
+
+  void initState() {
+    super.initState();
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final session = data.session;
+      if (session != null && mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      }
+    });
   }
 
   @override
@@ -152,10 +166,7 @@ class _SignupState extends State<Signup> {
                           },
                         ),
                         SizedBox(height: 20.h),
-                        CustomButton(
-                          text: "Sign Up",
-                          onPressed: register,
-                        ),
+                        CustomButton(text: "Sign Up", onPressed: register),
                         SizedBox(height: 20.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -182,8 +193,26 @@ class _SignupState extends State<Signup> {
                         SocialButton(
                           title: 'Sign Up with Google',
                           imagePath: AppImages.google,
-                          onPressed: () {
-                            print("Sign Up with Google pressed");
+                          onPressed: () async {
+                            try {
+                              await _authService.signInWithGoogle(context);
+                            } catch (e) {
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  CustomSnackBar(
+                                    title: "Authentication Error",
+                                    message:
+                                        e.toString().contains(
+                                          "provider_disabled",
+                                        )
+                                        ? "Google Sign-In is currently disabled. Please try again later."
+                                        : "Failed to sign in with Google.",
+                                    icon: Icons.error,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
                           },
                         ),
                         SizedBox(height: 20.h),
