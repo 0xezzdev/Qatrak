@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/feature/login/login.dart';
+import 'package:qatrak/feature/train_list/train_list_screen.dart';
 import 'package:qatrak/services/supabase_service.dart';
 // تأكد من استيراد ملف الألوان بتاعك
 // import 'package:qatrak/core/colors/app_colors.dart';
@@ -68,8 +69,8 @@ class Home extends StatelessWidget {
                     ),
                     child: Center(
                       child: IconButton(
-                        onPressed: () {
-                          SupabaseService.client.auth.signOut();
+                        onPressed: () async {
+                          await SupabaseService.client.auth.signOut();
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => Login()),
@@ -101,7 +102,15 @@ class Home extends StatelessWidget {
                         actionText: "Start Sharing",
                         isPrimary: true,
                         icon: Icons.sensors,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  TrainListScreen(isSharingMode: true),
+                            ),
+                          );
+                        },
                       ),
                       SizedBox(height: 20.h),
                       _buildFeatureCard(
@@ -111,7 +120,15 @@ class Home extends StatelessWidget {
                         actionText: "Search Trains",
                         isPrimary: false,
                         icon: Icons.search,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  TrainListScreen(isSharingMode: false),
+                            ),
+                          );
+                        },
                       ),
                       SizedBox(height: 20.h),
                     ],
