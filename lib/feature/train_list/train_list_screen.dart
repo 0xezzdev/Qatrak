@@ -124,11 +124,9 @@ class _TrainListScreenState extends State<TrainListScreen> {
                       selectedType == "All" || train.trainType == selectedType;
                   return matchesSearch && matchesType;
                 }).toList();
-
                 if (filteredTrains.isEmpty) {
                   return _buildEmptyState("No results match your search.");
                 }
-
                 return ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   itemCount: filteredTrains.length,
