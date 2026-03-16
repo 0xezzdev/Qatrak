@@ -60,7 +60,6 @@ class _TrainListScreenState extends State<TrainListScreen> {
               ),
             ),
           ),
-
           // 2. Filter Chips
           SizedBox(
             height: 50.h,
