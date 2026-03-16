@@ -151,7 +151,13 @@ class _LoginState extends State<Login> {
                         ],
                       ),
                       SizedBox(height: 20.h),
-                      SocialButton(),
+                      SocialButton(
+                        title: 'Login with Google',
+                        imagePath: AppImages.google,
+                        onPressed: () {
+                          print("Login with Google pressed");
+                        },
+                      ),
                       SizedBox(height: 20.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
