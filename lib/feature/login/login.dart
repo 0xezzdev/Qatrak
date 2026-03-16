@@ -10,6 +10,7 @@ import 'package:qatrak/core/widget/social_button.dart';
 import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/feature/signup/signup.dart';
 import 'package:qatrak/services/auth/auth_services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -53,6 +54,19 @@ class _LoginState extends State<Login> {
     }
     if (mounted) setState(() => isLoading = false);
   }
+  @override
+void initState() {
+  super.initState();
+  Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+    final session = data.session;
+    if (session != null && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+      );
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -183,8 +197,24 @@ class _LoginState extends State<Login> {
                       SocialButton(
                         title: 'Login with Google',
                         imagePath: AppImages.google,
-                        onPressed: () {
-                          print("Login with Google pressed");
+                        onPressed: () async {
+                          try {
+                            await _authService.signInWithGoogle(context);
+                          } catch (e) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                CustomSnackBar(
+                                  title: "Authentication Error",
+                                  message:
+                                      e.toString().contains("provider_disabled")
+                                      ? "Google Sign-In is currently disabled. Please try again later."
+                                      : "Failed to sign in with Google.",
+                                  icon: Icons.error,
+                                  color: Colors.red,
+                                ),
+                              );
+                            }
+                          }
                         },
                       ),
                       SizedBox(height: 20.h),

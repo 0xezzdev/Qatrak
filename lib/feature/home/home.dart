@@ -26,24 +26,30 @@ class Home extends StatelessWidget {
               SizedBox(height: 30.h),
               Row(
                 children: [
-                  Column(
-                    children: [
-                      Text(
-                        'Hello, $userName 👋',
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.foreground,
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello, $userName 👋',
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.foreground,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Text(
-                        'What would you like to do today?',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: AppColors.textHint,
+                        Text(
+                          'What would you like to do today?',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: AppColors.textHint,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const Spacer(),
                   Container(
