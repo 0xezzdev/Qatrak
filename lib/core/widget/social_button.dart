@@ -4,14 +4,17 @@ import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/images/app_images.dart';
 
 class SocialButton extends StatelessWidget {
-  const SocialButton({super.key});
+  const SocialButton({super.key, required this.title, required this.imagePath, this.onPressed});
+
+  final String title;
+  final String imagePath;
+  final void Function()? onPressed;
+
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        print("Login with Google pressed");
-      },
+      onTap: onPressed,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 15.h),
@@ -29,10 +32,10 @@ class SocialButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(AppImages.google, height: 25.h),
+            Image.asset(imagePath, height: 25.h),
             SizedBox(width: 10.w),
             Text(
-              "Login with Google",
+              title,
               style: TextStyle(
                 color: AppColors.primary,
                 fontSize: 16.sp,
