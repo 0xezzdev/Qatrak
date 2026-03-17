@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/model/train_model.dart';
+import 'package:qatrak/feature/live_trip_page/live_trip_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TrainListScreen extends StatefulWidget {
@@ -208,7 +209,12 @@ class _TrainListScreenState extends State<TrainListScreen> {
         onTap: () {
           // اللوجيك القادم: GPS Sharing أو Map Tracking
           if (widget.isSharingMode) {
-            print("Going to start GPS for: ${train.trainNumber}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LiveTripPage(trainData: train.toJson()),
+              ),
+            );
           } else {
             print("Going to track: ${train.trainNumber}");
           }
