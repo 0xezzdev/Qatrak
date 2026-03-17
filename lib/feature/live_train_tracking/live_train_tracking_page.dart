@@ -171,40 +171,50 @@ class _LiveTrainTrackingPageState extends State<LiveTrainTrackingPage>
   }
 
   Widget _buildNoDataState() {
-    return Container(
-      color: Colors.white,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.location_searching_rounded,
-            size: 80,
-            color: Colors.grey,
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            "No one has shared their location for this train yet",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black54,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        color: Colors.white,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.location_searching_rounded,
+              size: 80,
+              color: Colors.grey,
             ),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            "Once someone shares their location, it will appear here",
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.foreground,
+            const SizedBox(height: 20),
+            Center(
+              child: Text(
+                "No one has shared their location for this train yet",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
+              ),
             ),
-            child: const Text("Return", style: TextStyle(color: Colors.white)),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Center(
+              child: const Text(
+                "Once someone shares their location, it will appear here",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.foreground,
+              ),
+              child: const Text(
+                "Return",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -235,7 +245,7 @@ class _LiveTrainTrackingPageState extends State<LiveTrainTrackingPage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Train No: ${data['train_id']}",
+                  "Train No: ${widget.trainName}",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
