@@ -5,6 +5,7 @@ import 'package:qatrak/core/model/train_model.dart';
 import 'package:qatrak/feature/live_train_tracking/live_train_tracking_page.dart';
 import 'package:qatrak/feature/live_trip_page/live_trip_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class TrainListScreen extends StatefulWidget {
   final bool isSharingMode;
@@ -27,6 +28,50 @@ class _TrainListScreenState extends State<TrainListScreen> {
     "Russian AC",
     "Russian",
   ];
+
+  InterstitialAd? _interstitialAd;
+
+  static const String adUnitId = 'ca-app-pub-7193403289313889/5104737263';
+
+  void loadAd() {
+    InterstitialAd.load(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _interstitialAd!.fullScreenContentCallback =
+              FullScreenContentCallback(
+                onAdDismissedFullScreenContent: (ad) {
+                  ad.dispose();
+                  loadAd();
+                },
+                onAdFailedToShowFullScreenContent: (ad, error) {
+                  ad.dispose();
+                  loadAd();
+                },
+              );
+        },
+        onAdFailedToLoad: (error) {
+          print('InterstitialAd failed to load: $error');
+        },
+      ),
+    );
+  }
+
+  void showAd() async {
+    if (_interstitialAd != null) {
+      await _interstitialAd!.show();
+    } else {
+      print('Loading ad...');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadAd();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,10 +262,14 @@ class _TrainListScreenState extends State<TrainListScreen> {
               ),
             );
           } else {
+            showAd();
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LiveTrainTrackingPage(trainId: int.parse(train.id), trainName: train.trainNumber),
+                builder: (context) => LiveTrainTrackingPage(
+                  trainId: int.parse(train.id),
+                  trainName: train.trainNumber,
+                ),
               ),
             );
           }
