@@ -8,7 +8,8 @@ import 'package:qatrak/services/supabase_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseService.init();
-  runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
+  runApp(MyApp());
+  // runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           // ignore: deprecated_member_use
           useInheritedMediaQuery: true,
-          locale: DevicePreview.locale(context),
-          builder: DevicePreview.appBuilder,
+          //locale: DevicePreview.locale(context),
+          //builder: DevicePreview.appBuilder,
           home: SplashScreen(),
         );
       },

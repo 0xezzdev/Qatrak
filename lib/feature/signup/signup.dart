@@ -29,7 +29,10 @@ class _SignupState extends State<Signup> {
 
   Future<void> register() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+      showLoadingDialog();
+    });
     try {
       await _authService.signUpNewUser(
         name: nameController.text.trim(),
@@ -37,6 +40,7 @@ class _SignupState extends State<Signup> {
         password: passwordController.text.trim(),
       );
       if (mounted) {
+        Navigator.pop(context);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Home()),
@@ -44,6 +48,7 @@ class _SignupState extends State<Signup> {
       }
     } catch (e) {
       if (mounted) {
+        Navigator.pop(context);
         print(e);
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
@@ -71,6 +76,26 @@ class _SignupState extends State<Signup> {
         );
       }
     });
+  }
+
+  void showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.black.withValues(alpha: 0.2),
+        content: SizedBox(
+          width: 100.w,
+          height: 200.h,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: AppColors.primary,
+              strokeAlign: 20,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -194,10 +219,13 @@ class _SignupState extends State<Signup> {
                           title: 'Sign Up with Google',
                           imagePath: AppImages.google,
                           onPressed: () async {
+                            showLoadingDialog();
                             try {
                               await _authService.signInWithGoogle(context);
+                              Navigator.pop(context);
                             } catch (e) {
                               if (mounted) {
+                                Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   CustomSnackBar(
                                     title: "Authentication Error",

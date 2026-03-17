@@ -27,13 +27,18 @@ class _LoginState extends State<Login> {
   bool isLoading = false;
 
   Future<void> login() async {
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+      showLoadingDialog();
+    });
+
     try {
       await _authService.signInUser(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
       if (mounted) {
+        Navigator.pop(context);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Home()),
@@ -41,6 +46,7 @@ class _LoginState extends State<Login> {
       }
     } catch (e) {
       if (mounted) {
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
             title: 'Error',
@@ -50,23 +56,45 @@ class _LoginState extends State<Login> {
             icon: Icons.error_outline,
           ),
         );
+        isLoading = false;
       }
     }
     if (mounted) setState(() => isLoading = false);
   }
+
+  void showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.black.withValues(alpha: 0.2),
+        content: SizedBox(
+          width: 100.w,
+          height: 200.h,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: AppColors.primary,
+              strokeAlign: 20,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
-void initState() {
-  super.initState();
-  Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-    final session = data.session;
-    if (session != null && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
-    }
-  });
-}
+  void initState() {
+    super.initState();
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final session = data.session;
+      if (session != null && mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,10 +226,13 @@ void initState() {
                         title: 'Login with Google',
                         imagePath: AppImages.google,
                         onPressed: () async {
+                          showLoadingDialog();
                           try {
                             await _authService.signInWithGoogle(context);
+                            Navigator.pop(context);
                           } catch (e) {
                             if (mounted) {
+                              Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 CustomSnackBar(
                                   title: "Authentication Error",
