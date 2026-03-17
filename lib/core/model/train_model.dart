@@ -22,4 +22,14 @@ class TrainModel {
       direction: json['direction'].toString(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'train_number': trainNumber,
+      'train_type': trainType,
+      'route': route,
+      'direction': direction,
+    };
+  }
 }
