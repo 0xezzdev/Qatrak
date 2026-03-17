@@ -251,7 +251,7 @@ class _LiveTripPageState extends State<LiveTripPage> {
             child: Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: const Color(0xFF1D1B1E).withAlpha(240),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
               ),
@@ -274,7 +274,7 @@ class _LiveTripPageState extends State<LiveTripPage> {
                         Text(
                           "Your location helps passengers in real-time",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black87,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),

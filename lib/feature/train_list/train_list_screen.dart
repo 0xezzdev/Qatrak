@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/model/train_model.dart';
+import 'package:qatrak/feature/live_train_tracking/live_train_tracking_page.dart';
 import 'package:qatrak/feature/live_trip_page/live_trip_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -216,7 +217,12 @@ class _TrainListScreenState extends State<TrainListScreen> {
               ),
             );
           } else {
-            print("Going to track: ${train.trainNumber}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LiveTrainTrackingPage(trainId: int.parse(train.id), trainName: train.trainNumber),
+              ),
+            );
           }
         },
       ),
