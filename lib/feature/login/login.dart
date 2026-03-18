@@ -7,6 +7,7 @@ import 'package:qatrak/core/widget/custom_button.dart';
 import 'package:qatrak/core/widget/custom_snackbar.dart';
 import 'package:qatrak/core/widget/custom_text_field.dart';
 import 'package:qatrak/core/widget/social_button.dart';
+import 'package:qatrak/feature/forgot_password/forgot_password_page.dart';
 import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/feature/signup/signup.dart';
 import 'package:qatrak/services/auth/auth_services.dart';
@@ -85,15 +86,6 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final session = data.session;
-      if (session != null && mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Home()),
-        );
-      }
-    });
   }
 
   @override
@@ -186,7 +178,14 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordPage(),
+                                ),
+                              );
+                            },
                             child: Text(
                               'Forgot Password?',
                               style: TextStyle(
@@ -230,6 +229,12 @@ class _LoginState extends State<Login> {
                           try {
                             await _authService.signInWithGoogle(context);
                             Navigator.pop(context);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Home(),
+                              ),
+                            );
                           } catch (e) {
                             if (mounted) {
                               Navigator.pop(context);
