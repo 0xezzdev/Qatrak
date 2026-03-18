@@ -9,7 +9,6 @@ import 'package:qatrak/core/widget/custom_text_field.dart';
 import 'package:qatrak/core/widget/social_button.dart';
 import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/services/auth/auth_services.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});

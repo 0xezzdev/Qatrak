@@ -11,7 +11,6 @@ import 'package:qatrak/feature/forgot_password/forgot_password_page.dart';
 import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/feature/signup/signup.dart';
 import 'package:qatrak/services/auth/auth_services.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
