@@ -67,15 +67,6 @@ class _SignupState extends State<Signup> {
 
   void initState() {
     super.initState();
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final session = data.session;
-      if (session != null && mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Home()),
-        );
-      }
-    });
   }
 
   void showLoadingDialog() {
@@ -223,6 +214,12 @@ class _SignupState extends State<Signup> {
                             try {
                               await _authService.signInWithGoogle(context);
                               Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Home(),
+                                ),
+                              );
                             } catch (e) {
                               if (mounted) {
                                 Navigator.pop(context);

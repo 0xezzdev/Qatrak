@@ -120,6 +120,25 @@ class AuthServices {
     }
   }
 
+  Future<void> sendPasswordResetOTP(String email) async {
+    try {
+      print("Loli: Attempting to send OTP to $email...");
+      await supabase.auth.resetPasswordForEmail(email);
+      print("Loli: OTP sent successfully!");
+    } catch (e) {
+      print("Loli Error: ${e.toString()}");
+      rethrow;
+    }
+  }
+
+  Future<void> verifyOTP({required String email, required String token}) async {
+    await Supabase.instance.client.auth.verifyOTP(
+      email: email,
+      token: token,
+      type: OtpType.recovery,
+    );
+  }
+
   Future<void> signOutUser() async {
     await supabase.auth.signOut();
   }
