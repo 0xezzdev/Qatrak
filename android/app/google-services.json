@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "44628684089",
+    "project_id": "qatrak-0xezzdev",
+    "storage_bucket": "qatrak-0xezzdev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44628684089:android:e23f7512a323cc7332cce8",
+        "android_client_info": {
+          "package_name": "com.ezzdev.qatrak"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRZK2LZLDxoLaj3FkGoOHTTf6TRD0ghDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

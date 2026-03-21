@@ -299,7 +299,7 @@ class Home extends StatelessWidget {
                   "${AppStrings.homeStatTrains.tr()}",
                 ),
                 _buildVerticalDivider(),
-                _buildStatItem("98%", "${AppStrings.homeStatAccuracy.tr()}"),
+                _buildStatItem("96%", "${AppStrings.homeStatAccuracy.tr()}"),
               ],
             );
           },

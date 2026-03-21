@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/images/app_images.dart';
 import 'package:qatrak/feature/home/home.dart';
@@ -50,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 
 Future<void> checkSession() async {
+  await _checkForUpdate();
     await Future.delayed(const Duration(seconds: 3));
 
     if (!mounted || _isRecoveringPassword) return;
@@ -71,6 +73,17 @@ Future<void> checkSession() async {
       _navigateTo(const Login());
     }
   }
+
+  Future<void> _checkForUpdate() async {
+  try {
+    AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
+    if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+      await InAppUpdate.performImmediateUpdate();
+    }
+  } catch (e) {
+    debugPrint("Update check failed: $e");
+  }
+}
 
   void _navigateTo(Widget screen) {
     if (mounted) {
@@ -97,7 +110,7 @@ Future<void> checkSession() async {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 100.h),
+            SizedBox(height: 50.h),
             FadeTransition(
               opacity: _fadeAnimation,
               child: ScaleTransition(
