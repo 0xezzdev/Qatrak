@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LiveTripPage extends StatefulWidget {
@@ -49,14 +51,14 @@ class _LiveTripPageState extends State<LiveTripPage> {
     final androidSettings = AndroidSettings(
       accuracy: LocationAccuracy.low,
       distanceFilter: 1000,
-      foregroundNotificationConfig: const ForegroundNotificationConfig(
-        notificationText: "Tracking your train location in the background",
-        notificationTitle: "Qatrak - Live Train Tracking",
+      foregroundNotificationConfig: ForegroundNotificationConfig(
+        notificationText: AppStrings.liveTripBgNotifyBody.tr(),
+        notificationTitle: AppStrings.liveTripBgNotifyTitle.tr(),
         enableWakeLock: true,
         setOngoing: true,
-        notificationIcon: AndroidResource(
-          name: 'ic_launcher',
-          defType: 'mipmap',
+        notificationIcon: const AndroidResource(
+          name: 'train_not',
+          defType: 'drawable',
         ),
       ),
     );
@@ -165,7 +167,7 @@ class _LiveTripPageState extends State<LiveTripPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Tracking Train: ${widget.trainData['train_number'] ?? '---'}",
+              "${AppStrings.liveTripAppBarTitle.tr()} ${widget.trainData['train_number'] ?? '---'}",
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -173,13 +175,13 @@ class _LiveTripPageState extends State<LiveTripPage> {
               ),
             ),
             if (_isTracking)
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.circle, size: 8, color: Colors.greenAccent),
-                  SizedBox(width: 5),
+                  const Icon(Icons.circle, size: 8, color: Colors.greenAccent),
+                  const SizedBox(width: 5),
                   Text(
-                    "Live Tracking Active",
-                    style: TextStyle(color: Colors.greenAccent, fontSize: 11),
+                    AppStrings.liveTripActiveStatus.tr(),
+                    style: const TextStyle(color: Colors.greenAccent, fontSize: 11),
                   ),
                 ],
               ),
@@ -196,9 +198,9 @@ class _LiveTripPageState extends State<LiveTripPage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: const Text(
-                "End Trip",
-                style: TextStyle(color: Colors.white, fontSize: 12),
+              child: Text(
+                AppStrings.liveTripEndButton.tr(),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
             ),
           ),
@@ -262,18 +264,18 @@ class _LiveTripPageState extends State<LiveTripPage> {
                     child: Icon(Icons.share_location, color: Colors.white),
                   ),
                   const SizedBox(width: 15),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "You are contributing now",
-                          style: TextStyle(color: Colors.grey, fontSize: 11),
+                          AppStrings.liveTripCardTitle.tr(),
+                          style: const TextStyle(color: Colors.grey, fontSize: 11),
                         ),
                         Text(
-                          "Your location helps passengers in real-time",
-                          style: TextStyle(
+                          AppStrings.liveTripCardSubtitle.tr(),
+                          style: const TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,

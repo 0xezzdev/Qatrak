@@ -1,11 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/images/app_images.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
 import 'package:qatrak/core/widget/custom_button.dart';
 import 'package:qatrak/core/widget/custom_snackbar.dart';
 import 'package:qatrak/core/widget/custom_text_field.dart';
+import 'package:qatrak/core/widget/language_toggle.dart';
 import 'package:qatrak/core/widget/social_button.dart';
 import 'package:qatrak/feature/forgot_password/forgot_password_page.dart';
 import 'package:qatrak/feature/home/home.dart';
@@ -20,12 +23,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordHidden = true;
   final AuthServices _authService = AuthServices();
   bool isLoading = false;
-
   Future<void> login() async {
     setState(() {
       isLoading = true;
@@ -49,9 +52,8 @@ class _LoginState extends State<Login> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
-            title: 'Error',
-            message:
-                'Failed to sign in. Please check your credentials and try again.',
+            title: AppStrings.authErrorTitle.tr(),
+            message: AppStrings.loginFailedMessage.tr(),
             color: AppColors.error,
             icon: Icons.error_outline,
           ),
@@ -89,6 +91,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale = context.locale;
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: Stack(
@@ -101,9 +104,23 @@ class _LoginState extends State<Login> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      LanguageToggle(
+                        backgroundColor: AppColors.background,
+                        isEnColor: AppColors.primary,
+                        isNotEnColor: AppColors.background,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 SvgPicture.asset(AppImages.logo, height: 85.h),
                 Text(
-                  'Qatrak',
+                  AppStrings.appTitle.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32.sp,
@@ -111,7 +128,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 Text(
-                  'Track trains, Together',
+                  AppStrings.topicSentence.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,
@@ -136,150 +153,159 @@ class _LoginState extends State<Login> {
                     vertical: 20.0.sp,
                     horizontal: 20.0.sp,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome Back!',
-                        style: TextStyle(
-                          color: AppColors.foreground,
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppStrings.loginWeclome.tr(),
+                          style: TextStyle(
+                            color: AppColors.foreground,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10.h),
-                      CustomTextField(
-                        title: 'Email',
-                        hint: 'Enter your email',
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        isPassword: false,
-                      ),
-                      SizedBox(height: 15.h),
-                      CustomTextField(
-                        title: 'Password',
-                        hint: 'Enter your password',
-                        controller: passwordController,
-                        keyboardType: TextInputType.text,
-                        isPassword: isPasswordHidden,
-                        suffixIcon: isPasswordHidden
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        onPressedSuffix: () {
-                          setState(() {
-                            isPasswordHidden = !isPasswordHidden;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 10.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ForgotPasswordPage(),
+                        SizedBox(height: 10.h),
+                        CustomTextField(
+                          title: AppStrings.emailTextFieldTitle.tr(),
+                          hint: AppStrings.emailTextFieldHint.tr(),
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          isPassword: false,
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextField(
+                          title: AppStrings.passwordTextFieldTitle.tr(),
+                          hint: AppStrings.passwordTextFieldHint.tr(),
+                          controller: passwordController,
+                          keyboardType: TextInputType.text,
+                          isPassword: isPasswordHidden,
+                          suffixIcon: isPasswordHidden
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          onPressedSuffix: () {
+                            setState(() {
+                              isPasswordHidden = !isPasswordHidden;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgotPasswordPage(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                AppStrings.forgotPasswordButtonTitle.tr(),
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            },
-                            child: Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.h),
-                      CustomButton(text: 'Login', onPressed: login),
-                      SizedBox(height: 20.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 1.h,
-                            width: 100.w,
-                            color: AppColors.textHint,
-                          ),
-                          SizedBox(width: 10.w),
-                          Text(
-                            'OR',
-                            style: TextStyle(color: AppColors.textHint),
-                          ),
-                          SizedBox(width: 10.w),
-                          Container(
-                            height: 1.h,
-                            width: 100.w,
-                            color: AppColors.textHint,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.h),
-                      SocialButton(
-                        title: 'Login with Google',
-                        imagePath: AppImages.google,
-                        onPressed: () async {
-                          showLoadingDialog();
-                          try {
-                            await _authService.signInWithGoogle(context);
-                            Navigator.pop(context);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Home(),
-                              ),
-                            );
-                          } catch (e) {
-                            if (mounted) {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                CustomSnackBar(
-                                  title: "Authentication Error",
-                                  message:
-                                      e.toString().contains("provider_disabled")
-                                      ? "Google Sign-In is currently disabled. Please try again later."
-                                      : "Failed to sign in with Google.",
-                                  icon: Icons.error,
-                                  color: Colors.red,
-                                ),
+                          ],
+                        ),
+                        SizedBox(height: 20.h),
+                        CustomButton(
+                          text: AppStrings.loginButtonTitle.tr(),
+                          onPressed: login,
+                        ),
+                        SizedBox(height: 20.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 1.h,
+                              width: 100.w,
+                              color: AppColors.textHint,
+                            ),
+                            SizedBox(width: 10.w),
+                            Text(
+                              AppStrings.orText.tr(),
+                              style: TextStyle(color: AppColors.textHint),
+                            ),
+                            SizedBox(width: 10.w),
+                            Container(
+                              height: 1.h,
+                              width: 100.w,
+                              color: AppColors.textHint,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20.h),
+                        SocialButton(
+                          title: AppStrings.loginWithGoogleButtonTitle.tr(),
+                          imagePath: AppImages.google,
+                          onPressed: () async {
+                            showLoadingDialog();
+                            try {
+                              final user = await _authService.signInWithGoogle(
+                                context,
                               );
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
+                              if (user != null) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Home(),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              if (mounted) {
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  CustomSnackBar(
+                                    title: AppStrings.authErrorTitle.tr(),
+                                    message: AppStrings.googleSignInError.tr(),
+                                    icon: Icons.error,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              }
                             }
-                          }
-                        },
-                      ),
-                      SizedBox(height: 20.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: TextStyle(color: AppColors.textHint),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Signup(),
+                          },
+                        ),
+                        SizedBox(height: 20.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              AppStrings.dontHaveAccountText.tr(),
+                              style: TextStyle(color: AppColors.textHint),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Signup(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                AppStrings.loginSignUpButtonTitle.tr(),
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            },
-                            child: Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

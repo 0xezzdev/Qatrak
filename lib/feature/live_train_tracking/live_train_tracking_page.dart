@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LiveTrainTrackingPage extends StatefulWidget {
@@ -71,7 +73,7 @@ class _LiveTrainTrackingPageState extends State<LiveTrainTrackingPage>
             ],
           ),
           child: Text(
-            "Train ${widget.trainName}",
+            "${AppStrings.liveTrackAppBarTitle.tr()} ${widget.trainName}",
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -187,7 +189,8 @@ class _LiveTrainTrackingPageState extends State<LiveTrainTrackingPage>
             const SizedBox(height: 20),
             Center(
               child: Text(
-                "No one has shared their location for this train yet",
+                AppStrings.liveTrackNoDataTitle.tr(),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -197,8 +200,9 @@ class _LiveTrainTrackingPageState extends State<LiveTrainTrackingPage>
             ),
             const SizedBox(height: 10),
             Center(
-              child: const Text(
-                "Once someone shares their location, it will appear here",
+              child: Text(
+                AppStrings.liveTrackNoDataSubtitle.tr(),
+                textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey),
               ),
             ),
@@ -208,8 +212,8 @@ class _LiveTrainTrackingPageState extends State<LiveTrainTrackingPage>
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.foreground,
               ),
-              child: const Text(
-                "Return",
+              child: Text(
+                AppStrings.liveTrackReturnButton.tr(),
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -245,11 +249,11 @@ class _LiveTrainTrackingPageState extends State<LiveTrainTrackingPage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Train No: ${widget.trainName}",
+                  "${AppStrings.liveTrackCardNumber.tr()} ${widget.trainName}",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Last Update: ${data['last_update'].toString().substring(11, 16)}",
+                  "${AppStrings.liveTrackCardLastUpdate.tr()} ${data['last_update'].toString().substring(11, 16)}",
                   style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],

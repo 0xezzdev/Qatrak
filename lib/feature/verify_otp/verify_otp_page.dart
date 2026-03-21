@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
 import 'package:qatrak/core/widget/custom_button.dart';
 import 'package:qatrak/core/widget/custom_snackbar.dart';
 import 'package:qatrak/feature/update_password/update_password_page.dart';
@@ -50,8 +52,8 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
-            title: 'Error',
-            message: 'Invalid OTP. Please try again.',
+            title: AppStrings.verifyOtpErrorInvalidTitle.tr(),
+            message: AppStrings.verifyOtpErrorInvalidMessage.tr(),
             color: Colors.red,
             icon: Icons.error,
           ),
@@ -72,12 +74,12 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
           children: [
             SizedBox(height: 20.h),
             Text(
-              'Confirm Code',
+              AppStrings.verifyOtpTitle.tr(),
               style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10.h),
             Text(
-              'Enter the 6-digit code we sent to\n${widget.email}',
+              '${AppStrings.verifyOtpSubtitle.tr()}\n${widget.email}',
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.textHint),
             ),
@@ -100,13 +102,13 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
               const CircularProgressIndicator(color: AppColors.primary)
             else
               CustomButton(
-                text: 'Confirm',
+                text: AppStrings.verifyOtpButton.tr(),
                 onPressed: () {
                   if (pinController.text.length < 6) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       CustomSnackBar(
-                        title: 'Error',
-                        message: 'Please enter the 6-digit code',
+                        title: AppStrings.verifyOtpErrorIncompleteTitle.tr(),
+                        message: AppStrings.verifyOtpErrorIncompleteMessage.tr(),
                         color: Colors.orange,
                         icon: Icons.warning_amber_rounded,
                       ),

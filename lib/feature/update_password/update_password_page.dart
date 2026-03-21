@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
 import 'package:qatrak/core/widget/custom_button.dart';
 import 'package:qatrak/core/widget/custom_text_field.dart';
 import 'package:qatrak/core/widget/custom_snackbar.dart';
@@ -31,8 +33,8 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
-            title: 'Success',
-            message: 'Password updated!',
+            title: AppStrings.updatePasswordSuccessTitle.tr(),
+            message: AppStrings.updatePasswordSuccessMessage.tr(),
             color: Colors.green,
             icon: Icons.lock_reset,
           ),
@@ -47,8 +49,8 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
-            title: 'Error',
-            message: 'Failed to update password',
+            title: AppStrings.updatePasswordErrorTitle.tr(),
+            message: AppStrings.updatePasswordErrorMessage.tr(),
             color: AppColors.error,
             icon: Icons.error,
           ),
@@ -68,13 +70,13 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Set New Password',
+              AppStrings.updatePasswordTitle.tr(),
               style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 30.h),
             CustomTextField(
-              title: 'New Password',
-              hint: 'Enter your new password',
+              title: AppStrings.updatePasswordFieldTitle.tr(),
+              hint: AppStrings.updatePasswordFieldHint.tr(),
               controller: passwordController,
               isPassword: isHidden,
               suffixIcon: isHidden ? Icons.visibility_off : Icons.visibility,
@@ -83,7 +85,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
             SizedBox(height: 30.h),
             isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : CustomButton(text: 'Update Password', onPressed: update),
+                : CustomButton(text: AppStrings.updatePasswordButton.tr(), onPressed: update),
           ],
         ),
       ),
