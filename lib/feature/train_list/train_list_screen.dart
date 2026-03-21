@@ -149,7 +149,6 @@ class _TrainListScreenState extends State<TrainListScreen> {
 
           SizedBox(height: 10.h),
 
-          // 3. Trains List with Empty State
           Expanded(
             child: StreamBuilder<List<Map<String, dynamic>>>(
               stream: Supabase.instance.client
@@ -258,7 +257,6 @@ class _TrainListScreenState extends State<TrainListScreen> {
         ),
         trailing: Icon(Icons.chevron_right, color: AppColors.primary),
         onTap: () {
-          // اللوجيك القادم: GPS Sharing أو Map Tracking
           if (widget.isSharingMode) {
             Navigator.push(
               context,
