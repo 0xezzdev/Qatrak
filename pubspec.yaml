@@ -49,6 +49,7 @@ dependencies:
   pinput: ^5.0.0
   connectivity_plus: ^6.1.0
   easy_localization: ^3.0.8
+  smooth_page_indicator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -6,7 +6,9 @@ import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/images/app_images.dart';
 import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/feature/login/login.dart';
+import 'package:qatrak/feature/onboarding/onboarding_screen.dart';
 import 'package:qatrak/services/supabase_service.dart';
+import 'package:shared_preferences/shared_preferences.dart'; 
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -46,15 +48,25 @@ class _SplashScreenState extends State<SplashScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) => checkSession());
   }
 
-  Future<void> checkSession() async {
+
+Future<void> checkSession() async {
     await Future.delayed(const Duration(seconds: 3));
 
     if (!mounted || _isRecoveringPassword) return;
 
     try {
-      final session = SupabaseService.client.auth.currentSession;
+      final prefs = await SharedPreferences.getInstance();
+      
+      final bool onboardingSeen = prefs.getBool('onboarding_seen') ?? false;
 
+      if (!onboardingSeen) {
+        _navigateTo(const OnboardingScreen());
+        return;
+      }
+
+      final session = SupabaseService.client.auth.currentSession;
       _navigateTo(session != null ? const Home() : const Login());
+      
     } catch (e) {
       _navigateTo(const Login());
     }
