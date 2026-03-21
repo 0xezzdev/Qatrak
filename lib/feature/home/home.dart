@@ -1,17 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
+import 'package:qatrak/core/widget/language_toggle.dart';
 import 'package:qatrak/feature/login/login.dart';
 import 'package:qatrak/feature/train_list/train_list_screen.dart';
 import 'package:qatrak/services/supabase_service.dart';
-// تأكد من استيراد ملف الألوان بتاعك
-// import 'package:qatrak/core/colors/app_colors.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale = context.locale;
     final String userName =
         SupabaseService.client.auth.currentUser?.userMetadata?['name'] ??
         'Traveler';
@@ -33,7 +35,7 @@ class Home extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hello, $userName 👋',
+                          '${AppStrings.homeHello.tr()}, $userName 👋',
                           style: TextStyle(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.bold,
@@ -43,7 +45,7 @@ class Home extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          'What would you like to do today?',
+                          AppStrings.homeQuestion.tr(),
                           style: TextStyle(
                             fontSize: 14.sp,
                             color: AppColors.textHint,
@@ -53,39 +55,51 @@ class Home extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Container(
-                    height: 40.h,
-                    width: 40.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.background,
-                      borderRadius: BorderRadius.circular(100.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
+                  Column(
+                    children: [
+                      Container(
+                        height: 40.h,
+                        width: 40.w,
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          borderRadius: BorderRadius.circular(100.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 5,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () async {
-                          await SupabaseService.client.auth.signOut();
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => Login()),
-                            (route) => false,
-                          );
-                        },
-                        icon: Icon(
-                          Icons.logout,
-                          color: AppColors.primary,
-                          size: 20.sp,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () async {
+                              await SupabaseService.client.auth.signOut();
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Login(),
+                                ),
+                                (route) => false,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.logout,
+                              color: AppColors.primary,
+                              size: 20.sp,
+                            ),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
                         ),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
                       ),
-                    ),
+                      SizedBox(height: 10.h),
+                      LanguageToggle(
+                        backgroundColor: AppColors.primary,
+                        isEnColor: AppColors.background,
+                        isNotEnColor: AppColors.primary,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -96,10 +110,9 @@ class Home extends StatelessWidget {
                   child: Column(
                     children: [
                       _buildFeatureCard(
-                        title: "I am a Passenger",
-                        subtitle:
-                            "Share your live location to help others track this train in real-time",
-                        actionText: "Start Sharing",
+                        title: AppStrings.homePassengerTitle.tr(),
+                        subtitle: AppStrings.homePassengerSubtitle.tr(),
+                        actionText: AppStrings.homePassengerAction.tr(),
                         isPrimary: true,
                         icon: Icons.sensors,
                         onTap: () {
@@ -114,10 +127,9 @@ class Home extends StatelessWidget {
                       ),
                       SizedBox(height: 20.h),
                       _buildFeatureCard(
-                        title: "I'm Looking for a Train",
-                        subtitle:
-                            "Find and track any train on the network with real-time community updates",
-                        actionText: "Search Trains",
+                        title: AppStrings.homeSearchTitle.tr(),
+                        subtitle: AppStrings.homeSearchSubtitle.tr(),
+                        actionText: AppStrings.homeSearchAction.tr(),
                         isPrimary: false,
                         icon: Icons.search,
                         onTap: () {
@@ -137,8 +149,6 @@ class Home extends StatelessWidget {
               ),
               SizedBox(height: 20.h),
               _buildStatsSection(),
-              SizedBox(height: 15.h),
-              Center(child: Text("Powered by Ezzeldeen Mohamed",style: TextStyle(color: Colors.grey),)),
               SizedBox(height: 15.h),
             ],
           ),
@@ -249,7 +259,7 @@ class Home extends StatelessWidget {
         border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
       ),
       child: Text(
-        '● LIVE',
+        '● ${AppStrings.homeLiveTitle.tr()}',
         style: TextStyle(
           color: Colors.white,
           fontSize: 10.sp,
@@ -279,11 +289,17 @@ class Home extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatItem(activeUsers.toString(), "Active Users"),
+                _buildStatItem(
+                  activeUsers.toString(),
+                  "${AppStrings.homeStatUsers.tr()}",
+                ),
                 _buildVerticalDivider(),
-                _buildStatItem(trainsLive.toString(), "Trains Live"),
+                _buildStatItem(
+                  trainsLive.toString(),
+                  "${AppStrings.homeStatTrains.tr()}",
+                ),
                 _buildVerticalDivider(),
-                _buildStatItem("98%", "Accuracy"),
+                _buildStatItem("98%", "${AppStrings.homeStatAccuracy.tr()}"),
               ],
             );
           },

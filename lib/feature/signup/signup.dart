@@ -1,11 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/images/app_images.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
 import 'package:qatrak/core/widget/custom_button.dart';
 import 'package:qatrak/core/widget/custom_snackbar.dart';
 import 'package:qatrak/core/widget/custom_text_field.dart';
+import 'package:qatrak/core/widget/language_toggle.dart';
 import 'package:qatrak/core/widget/social_button.dart';
 import 'package:qatrak/feature/home/home.dart';
 import 'package:qatrak/services/auth/auth_services.dart';
@@ -51,10 +54,10 @@ class _SignupState extends State<Signup> {
         print(e);
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
-            title: 'Error',
+            title: AppStrings.authErrorTitle.tr(),
             message: e.toString().contains("already")
-                ? 'Email already in use'
-                : 'Failed to sign up. Please try again.',
+                ? AppStrings.emailAlreadyInUse.tr()
+                : AppStrings.signUpFailed.tr(),
             color: AppColors.error,
             icon: Icons.error_outline,
           ),
@@ -102,9 +105,23 @@ class _SignupState extends State<Signup> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      LanguageToggle(
+                        backgroundColor: AppColors.background,
+                        isEnColor: AppColors.primary,
+                        isNotEnColor: AppColors.background,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 SvgPicture.asset(AppImages.logo, height: 85.h),
                 Text(
-                  'Qatrak',
+                  AppStrings.appTitle.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32.sp,
@@ -112,7 +129,7 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 Text(
-                  'Track trains, Together',
+                  AppStrings.topicSentence.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,
@@ -145,7 +162,7 @@ class _SignupState extends State<Signup> {
                         SizedBox(height: 20.h),
                         Center(
                           child: Text(
-                            "Create Account",
+                            AppStrings.signUpTitle.tr(),
                             style: TextStyle(
                               color: AppColors.primary,
                               fontSize: 24.sp,
@@ -155,20 +172,20 @@ class _SignupState extends State<Signup> {
                         ),
                         SizedBox(height: 20.h),
                         CustomTextField(
-                          title: 'Name',
-                          hint: 'Enter your name',
+                          title: AppStrings.userNameFieldTitle.tr(),
+                          hint: AppStrings.userNameFieldHint.tr(),
                           controller: nameController,
                         ),
                         SizedBox(height: 10.h),
                         CustomTextField(
-                          title: 'Email',
-                          hint: 'Enter your email',
+                          title: AppStrings.emailTextFieldTitle.tr(),
+                          hint: AppStrings.emailTextFieldHint.tr(),
                           controller: emailController,
                         ),
                         SizedBox(height: 10.h),
                         CustomTextField(
-                          title: 'Password',
-                          hint: 'Enter your password',
+                          title: AppStrings.passwordTextFieldTitle.tr(),
+                          hint: AppStrings.passwordTextFieldHint.tr(),
                           controller: passwordController,
                           isPassword: isPasswordHidden,
                           suffixIcon: isPasswordHidden
@@ -181,7 +198,10 @@ class _SignupState extends State<Signup> {
                           },
                         ),
                         SizedBox(height: 20.h),
-                        CustomButton(text: "Sign Up", onPressed: register),
+                        CustomButton(
+                          text: AppStrings.signUpButton.tr(),
+                          onPressed: register,
+                        ),
                         SizedBox(height: 20.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -193,7 +213,7 @@ class _SignupState extends State<Signup> {
                             ),
                             SizedBox(width: 10.w),
                             Text(
-                              'OR',
+                              AppStrings.orText.tr(),
                               style: TextStyle(color: AppColors.textHint),
                             ),
                             SizedBox(width: 10.w),
@@ -206,31 +226,38 @@ class _SignupState extends State<Signup> {
                         ),
                         SizedBox(height: 20.h),
                         SocialButton(
-                          title: 'Sign Up with Google',
+                          title: AppStrings.signUpWithGoogle.tr(),
                           imagePath: AppImages.google,
                           onPressed: () async {
                             showLoadingDialog();
                             try {
-                              await _authService.signInWithGoogle(context);
-                              Navigator.pop(context);
-                              Navigator.pushReplacement(
+                              final user = await _authService.signInWithGoogle(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Home(),
-                                ),
                               );
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
+
+                              if (user != null) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Home(),
+                                  ),
+                                );
+                              }
                             } catch (e) {
                               if (mounted) {
                                 Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   CustomSnackBar(
-                                    title: "Authentication Error",
+                                    title: AppStrings.authErrorTitle.tr(),
                                     message:
                                         e.toString().contains(
                                           "provider_disabled",
                                         )
-                                        ? "Google Sign-In is currently disabled. Please try again later."
-                                        : "Failed to sign in with Google.",
+                                        ? AppStrings.googleDisabledMessage.tr()
+                                        : AppStrings.googleSignInError.tr(),
                                     icon: Icons.error,
                                     color: Colors.red,
                                   ),
@@ -244,7 +271,7 @@ class _SignupState extends State<Signup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Already have an account?",
+                              AppStrings.alreadyHaveAccount.tr(),
                               style: TextStyle(color: AppColors.textHint),
                             ),
                             TextButton(
@@ -252,7 +279,7 @@ class _SignupState extends State<Signup> {
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                "Login",
+                                AppStrings.loginButtonTitle.tr(),
                                 style: TextStyle(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.bold,

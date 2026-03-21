@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:qatrak/core/Utilities/string_extensions.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
 import 'package:qatrak/core/model/train_model.dart';
+import 'package:qatrak/core/strings/app_strings.dart';
 import 'package:qatrak/feature/live_train_tracking/live_train_tracking_page.dart';
 import 'package:qatrak/feature/live_trip_page/live_trip_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -18,6 +21,7 @@ class TrainListScreen extends StatefulWidget {
 class _TrainListScreenState extends State<TrainListScreen> {
   String searchQuery = "";
   String selectedType = "All";
+
   final List<String> trainTypes = [
     "All",
     "Talgo",
@@ -28,7 +32,6 @@ class _TrainListScreenState extends State<TrainListScreen> {
     "Russian AC",
     "Russian",
   ];
-
   InterstitialAd? _interstitialAd;
 
   static const String adUnitId = 'ca-app-pub-7193403289313889/5104737263';
@@ -79,7 +82,9 @@ class _TrainListScreenState extends State<TrainListScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
-          widget.isSharingMode ? 'Select Your Train' : 'Track a Train',
+          widget.isSharingMode
+              ? "${AppStrings.trainListSharingTitle.tr()}"
+              : "${AppStrings.trainListTrackingTitle.tr()}",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         ),
         centerTitle: true,
@@ -95,7 +100,7 @@ class _TrainListScreenState extends State<TrainListScreen> {
             child: TextField(
               onChanged: (value) => setState(() => searchQuery = value),
               decoration: InputDecoration(
-                hintText: "Search by train number...",
+                hintText: AppStrings.trainListSearchHint.tr(),
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.white,
@@ -120,7 +125,7 @@ class _TrainListScreenState extends State<TrainListScreen> {
                 return Padding(
                   padding: EdgeInsets.only(right: 10.w),
                   child: FilterChip(
-                    label: Text(type),
+                    label: Text(type.translateTrainData(context)),
                     selected: isSelected,
                     onSelected: (val) => setState(() => selectedType = type),
                     selectedColor: AppColors.primary,
@@ -156,7 +161,7 @@ class _TrainListScreenState extends State<TrainListScreen> {
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return _buildEmptyState("No trains in database yet.");
+                  return _buildEmptyState(AppStrings.trainListEmptyDb.tr());
                 }
 
                 final List<TrainModel> allTrains = snapshot.data!
@@ -172,7 +177,7 @@ class _TrainListScreenState extends State<TrainListScreen> {
                   return matchesSearch && matchesType;
                 }).toList();
                 if (filteredTrains.isEmpty) {
-                  return _buildEmptyState("No results match your search.");
+                  return _buildEmptyState(AppStrings.trainListNoResults.tr());
                 }
                 return ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -231,22 +236,22 @@ class _TrainListScreenState extends State<TrainListScreen> {
           child: Icon(Icons.train, color: AppColors.primary),
         ),
         title: Text(
-          "Train No: ${train.trainNumber}",
+          "${AppStrings.trainListNumberLabel.tr()} ${train.trainNumber}",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Type: ${train.trainType}",
+              "${AppStrings.trainListTypeLabel.tr()} ${train.trainType.translateTrainData(context)}",
               style: TextStyle(color: AppColors.textHint, fontSize: 14.sp),
             ),
             Text(
-              "Route: ${train.route}",
+              "${AppStrings.trainListRouteLabel.tr()} ${train.route.translateTrainData(context)}",
               style: TextStyle(color: AppColors.textHint, fontSize: 14.sp),
             ),
             Text(
-              "Direction: ${train.direction}",
+              "${AppStrings.trainListDirectionLabel.tr()} ${train.direction.translateTrainData(context)}",
               style: TextStyle(color: AppColors.textHint, fontSize: 14.sp),
             ),
           ],

@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qatrak/core/colors/app_colors.dart';
@@ -9,7 +10,15 @@ import 'package:qatrak/services/supabase_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseService.init();
-  runApp(MyApp());
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const MyApp(),
+    ),
+  );
   //runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
 }
 
@@ -29,6 +38,9 @@ class MyApp extends StatelessWidget {
           useInheritedMediaQuery: true,
           //locale: DevicePreview.locale(context),
           //builder: DevicePreview.appBuilder,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           home: SplashScreen(),
           builder: (context, child) {
             return NetworkWrapper(child: child!);
