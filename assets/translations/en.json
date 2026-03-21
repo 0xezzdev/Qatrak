@@ -107,5 +107,14 @@
   "live_trip_card_title": "You are contributing now",
   "live_trip_card_subtitle": "Your location helps passengers in real-time",
   "live_trip_bg_notify_title": "Qatrak - Live Train Tracking",
-  "live_trip_bg_notify_body": "Tracking your train location in the background"
+  "live_trip_bg_notify_body": "Tracking your train location in the background",
+
+  "onboarding_skip": "Skip",
+  "onboarding_start": "Get Started",
+  "onboarding_1_title": "Track Your Train Real-time",
+  "onboarding_1_desc": "Know exactly where your train is on the map and plan your time effectively.",
+  "onboarding_2_title": "Help Others On Their Journey",
+  "onboarding_2_desc": "Share your location while on board to help other passengers track the train.",
+  "onboarding_3_title": "Totally Free & Our Goal is You",
+  "onboarding_3_desc": "Qatrak is free and will remain so to make travel easier for all Egyptians."
 }
